@@ -23,7 +23,7 @@ npx webpack --config [ 文件名 ]
     - 是一个封装器（wrapper），它可以把webpack处理过的文件发送到一个server。webpack-dev-server在内部使用了它，然而它可以作为一个单独的package来使用，以便需求进行更多自定义设置。下面是一个webapck-dev-middleware配合express server的实例。
     - 需要自己写一个server
 
-## 模块热替换（HMR）
+## 模块热替换（HMR）（需要在次巩固学习）
     HMR（hot module replacement）它允许在运行时更新所有类型的模块，而[无需完全刷新]
 
 ## tree shaking
@@ -43,7 +43,17 @@ npx webpack --config [ 文件名 ]
         - 防止重复
             使用SplitChunksPlugin 插件可以将公共的依赖模块提取到已有的 entry chunk 中，或者提取到一个新生成的 chunk
     2. 防止重复：使用SplitChunksPlugin去重和分离chunk。
+    ```js
+        optimization:{
+            splitChunks:{
+                chunks: 'all'
+            }   
+        }
+    ```
     3. 动态导入：通过模块中内联函数调用来分离代码。
+        1. import() 语法。import()调用会在内部用到promises。旧版浏览器需要使用（es6-promise或promise-polyfill）进行兼容。
+        2. webpack特定的 require.ensure。
+- 预取、预加载模块（prefetch/preload module）*（还没有亲自尝试）
 
 ##### 小提示：在任何位于 /src 的本地代码都可以关联到 process.env.NODE_ENV 环境变量。
 ##### 注意：避免在生产中使用 inline-xxx 和 eval-xxx，因为它们会增加bundle体积大小，并降低整体性能。
@@ -52,3 +62,9 @@ npx webpack --config [ 文件名 ]
 [HtmlWebpackPlugin] 简化了HTML文件的创建，以便为你的webpack包提供服务。这对于在文件名中包含每次会随着编译而发生变化哈希的webpack bundle非常有用。
 
 [clean-webpack-plugin] 清理插件
+
+[mini-css-extract-plugin] 用于将css从主应用程序中分离。
+
+[bundle-loader] 用于分离代码和延迟加载生成的bundle。
+
+[promise-loader] 类似于 bundle-loader，但是使用了promise API。
