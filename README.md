@@ -1,3 +1,4 @@
+tips: 如果要是调试笔记源代码请忽略根目录下的src和webpack.config.js，使用对应的知识点目录结合根目录下的package.json文件进行调试
 ## npx
 Node 8.2/npm 5.2.0 以上版本提供**npx**命令，可以运行在开始安装webpack package中的二进制文件(即 ./node_modules/.bin/webpack)
 
