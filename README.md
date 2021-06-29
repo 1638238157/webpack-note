@@ -61,6 +61,45 @@ npx webpack --config [ 文件名 ]
 ## 懒加载
 > 小提示： 注意当调用ES6模块的import()方法（引入模块）时，必须指向模块的 .default 值，因为它才是promise被处理后返回的实际的module对象。
 
+## 缓存
+    浏览器会缓存资源，我们在部署新版本的时候，不更改资源文件名，浏览器可以能会认为它没有更新，就会使用缓存版本。
+    通过配置webpack编译生成的文件能够被客户端缓存，而在文件内容变化后，能够请求新的文件。
+### 输出文件的文件名（output filename）
+设置 [contenthash] 将根据资源内容创建出唯一hash。当资源内容发生变化时，[contenthash]也会发生变化。
+```js
+output: {
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist')
+}
+```
+### 提取引导模板
+将第三方库，提取到单独vendor chunk文件中，是比较推荐的做法，因为它们很少向本地的源代码那样频繁修改。
+利用clien的长效缓存机制，命中缓存来消除请求，并减少向server获取资源，同时还能保证client代码和server代码版本一致。
+通过使用 SplitChunksPlugin 插件的 cacheGroups 选项来实现。
+```js
+optimization:{
+    runtimeChunk: 'single',
+    splitChunks:{
+        cacheGroups:{
+            vendor:{
+                test: /[\\/]node_modules[\\/]/,
+                name: 'vendors',
+                chunks: 'all'
+            }
+        }
+    }
+}
+```
+### 模块标识符
+每个module.id 会默认的基于解析顺序(resolve order)进行增量。当解析顺序发生变化，ID也会随之变化。- 
+- 两个插件可以解决
+    1. NameModulesPlugin 将使用模块的路径，而不是一个数字标识符（identifier）。可读性高，执行时间长。
+    2. HashedModuleIdsPlugin 推荐用于生产环境构建
+        ```js
+            plugins:[
+                new webpack.HashedModuleIdsPlugin
+            ]
+        ```
 ## 插件
 [HtmlWebpackPlugin] 简化了HTML文件的创建，以便为你的webpack包提供服务。这对于在文件名中包含每次会随着编译而发生变化哈希的webpack bundle非常有用。
 
