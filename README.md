@@ -58,6 +58,9 @@ npx webpack --config [ 文件名 ]
 ##### 小提示：在任何位于 /src 的本地代码都可以关联到 process.env.NODE_ENV 环境变量。
 ##### 注意：避免在生产中使用 inline-xxx 和 eval-xxx，因为它们会增加bundle体积大小，并降低整体性能。
 
+## 懒加载
+> 小提示： 注意当调用ES6模块的import()方法（引入模块）时，必须指向模块的 .default 值，因为它才是promise被处理后返回的实际的module对象。
+
 ## 插件
 [HtmlWebpackPlugin] 简化了HTML文件的创建，以便为你的webpack包提供服务。这对于在文件名中包含每次会随着编译而发生变化哈希的webpack bundle非常有用。
 
