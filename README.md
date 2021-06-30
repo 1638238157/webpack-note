@@ -1,4 +1,56 @@
 tips: 如果要是调试笔记源代码请忽略根目录下的src和webpack.config.js，使用对应的知识点目录结合根目录下的package.json文件进行调试
+## 阅读文档顺序
+概念 -> 指南 -> 配置 -> API （loader和plugin配置前者去看）
+
+## entry（入口）
+指示webpack应该使用哪个模块，来作为构建其内部依赖图的开始。进入入口起点后，webpack会找出哪些模块和库是入口起点（直接和间接）依赖的。
+- 单个入口
+entry:{
+    main: './src/index.js'
+}
+- 简写形式
+entry: "./src/index.js"
+- 数组语法
+entry:['./src/index.js','./src/main.js']
+将创建出一个多主入口，想要一次注入多个依赖文件，并且将它们的依赖导向一个chunk事，可以使用这种方式
+- 对象语法
+entry: {
+    index:"./src/index.js",
+    login:"./src/login.js"
+}
+对象语法中也可以使用数组语法
+
+## output（输出/出口）
+告诉webpack在哪里输出它所创建的bundle，以及如何命名这些文件。主要输入文件默认是'./dist/main.js'，其他生成文件默认放置在'./dist'文件夹中。
+
+## loader
+webpack只能理解JavaScript和JSON文件。loader让webpack能够去处理其他类型的文件，并将它们转换为有效模块，以供应用程序使用，
+以及被添加到依赖图中。
+- 在webpack配置中loader有两个属性：
+    1. test 属性，用于标识出相应的loader进行转换的某个或某些文件。
+    2. use 属性，标识进行转换时，应该使用哪个loader。
+```js
+    module:{
+        rules:[
+            {test: /\.txt$/,use: 'raw-loader'}
+        ]   
+    }
+```
+- [loader的执行顺序是从右到左/从下到上/从后到前]
+- 内联方式使用
+```js
+import Styles from 'style-loader!css-loader?modules!./styles.css';
+```
+使用 ! 为整个规则添加前缀，可以覆盖配置中的所有 loader 定义。
+选项可以传递查询参数，例如 ?key=value&foo=bar，或者一个 JSON 对象，例如 ?{"key":"value","foo":"bar"}。
+tips: 尽可能使用 module.rules，因为这样可以减少源码中样板文件的代码量，并且可以在出错时，更快地调试和定位 loader 中的问题。
+
+- 通过CLI方式使用loader
+```js
+    webpack --module-bind jade-loader --module-bind 'css=style-loader!css-loader'
+```
+这会对 .jade 文件使用 jade-loader，以及对 .css 文件使用 style-loader 和 css-loader。
+
 ## npx
 Node 8.2/npm 5.2.0 以上版本提供**npx**命令，可以运行在开始安装webpack package中的二进制文件(即 ./node_modules/.bin/webpack)
 
