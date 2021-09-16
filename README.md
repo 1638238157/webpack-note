@@ -154,6 +154,7 @@ optimization:{
             ]
         ```
 ## 创建library (没太懂)
+
 ## 插件
 [HtmlWebpackPlugin] 简化了HTML文件的创建，以便为你的webpack包提供服务。这对于在文件名中包含每次会随着编译而发生变化哈希的webpack bundle非常有用。
 
